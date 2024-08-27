@@ -18,7 +18,7 @@ Flask, Python, TensorFlow, OpenCV, HTML/CSS/Javascript, NumPy, Pandas
   <li><b>Python</b></li>
   <li><b>TensorFlow</b></li>
   <li><b>OpenCV</b></li>
-  <li><b>HTML/CSS?Javascript</b></li>
+  <li><b>HTML/CSS/Javascript</b></li>
   <li><b>NumPy</b></li>
   <li><b>Pandas</b></li>
 </ul>
