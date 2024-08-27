@@ -78,7 +78,10 @@ source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`</code></pr
     <li>The application may require fine-tuning for better performance on diverse datasets.</li>
 </ul>
 
+
 <h2>Contributing</h2>
+<p>Contributions are welcome! Please fork the repository, create a new branch, and submit a pull request with your changes. For major changes, please open an issue first to discuss what you would like to change.</p>
+
 <p>
 
 <h2>
