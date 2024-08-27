@@ -90,20 +90,20 @@ source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`</code></pr
 
 <hr>
 
-<h3>Book Page</h3>
+<h3>Comic Book Cover</h3>
 
 <p align="center">
-  <kbd><img src="https://i.imgur.com/GCZqyTU.jpeg" alt="BookPage" width="900"></kbd>
+  <kbd><img src="https://i.imgur.com/SrQ3qVB.png" alt="ComicBook" width="900"></kbd>
 </p>
 
-<p>The first step is to take in the book page the program will be analyzing. The program will identify all the text in the image and try to find what book it is from by using Google Books API.</p>
+<p>The main page gives the option for the user to choose a comic cover from their computer. Clicking on "identify Comic" before choosing a comic cover will do nothing.</p>
 
 <hr>
 
-<h3>Transcribing text in image</h3>
+<h3>Choosing a file</h3>
 
 <p align="center">
-  <kbd><img src="https://i.imgur.com/8Ews4QR.png" alt="TranscribingImage"></kbd>
+  <kbd><img src="https://i.imgur.com/HvubM7R.png" alt="ChoosingCover"></kbd>
 </p>
 
 <p>The next step is transcribing the image to text and printing it to the console using OCR. We can see from the image above that the program does that correctly. The last part of the program will be to find what book the page is from.</p>
@@ -113,7 +113,15 @@ source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`</code></pr
 <h3>Identifying what Book the text is from</h3>
 
 <p align="center">
-  <kbd><img src="https://i.imgur.com/jDpXSXE.png" alt="TranslatingText"></kbd>
+  <kbd><img src="https://i.imgur.com/tZLRLJb.png" alt="TranslatingText"></kbd>
+</p>
+
+<p>The last step in the program is using the Google Books APi to find what book the page being analyzed is from. The API compares the text we have provided to their library of book titles, trying to find a match. You can see in the image above that the best match the program has found is Frank Herbert's "Dune", which is the correct answer.</p>
+
+<h3>Identifying what Book the text is from</h3>
+
+<p align="center">
+  <kbd><img src="https://i.imgur.com/ZWw2c59.png" alt="TranslatingText"></kbd>
 </p>
 
 <p>The last step in the program is using the Google Books APi to find what book the page being analyzed is from. The API compares the text we have provided to their library of book titles, trying to find a match. You can see in the image above that the best match the program has found is Frank Herbert's "Dune", which is the correct answer.</p>
