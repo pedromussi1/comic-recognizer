@@ -30,6 +30,32 @@ Flask, Python, TensorFlow, OpenCV, HTML/CSS/Javascript, NumPy, Pandas
   <li><b>Visual Studio Code</b></li>
 </ul>
 
+<h2>Usage</h2>
+<ol>
+    <li>Open the application in your web browser.</li>
+    <li>Choose a comic book cover image from your local files using the file input field.</li>
+    <li>Click the "Identify Comic" button to upload the image and process it.</li>
+    <li>The result will display below the upload form, showing the identified comic book.</li>
+</ol>
+
+<h2>Code Structure</h2>
+<ul>
+    <li><strong>app.py:</strong> Main application file, contains routes and logic for preprocessing and classification.</li>
+    <li><strong>static/:</strong> Contains static files such as CSS, JavaScript, and images.</li>
+    <li><strong>templates/:</strong> HTML templates for rendering the web pages.</li>
+    <li><strong>data/:</strong> Contains image data and any additional resources.</li>
+    <li><strong>models/:</strong> Stores the trained machine learning model.</li>
+</ul>
+
+<h2>Known Issues</h2>
+<ul>
+    <li>Images with different backgrounds may affect the identification accuracy.</li>
+    <li>The application may require fine-tuning for better performance on diverse datasets.</li>
+</ul>
+
+<h2>Contributing</h2>
+<p>
+
 <h2>
 <a href="https://github.com/pedromussi1/OCRbookFinder/blob/main/READCODE.md">Code Breakdown Here!</a>
 </h2>
