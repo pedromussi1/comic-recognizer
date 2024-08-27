@@ -88,10 +88,6 @@ source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`</code></pr
 <a href="https://github.com/pedromussi1/OCRbookFinder/blob/main/READCODE.md">Code Breakdown Here!</a>
 </h2>
 
-<h2>Project Walk-through</h2>
-
-<p>Download files, install Tesseract and Google Books into Python Interpreter. Run main.py file.</p>
-
 <hr>
 
 <h3>Book Page</h3>
