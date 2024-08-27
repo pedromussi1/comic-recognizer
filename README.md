@@ -30,6 +30,31 @@ Flask, Python, TensorFlow, OpenCV, HTML/CSS/Javascript, NumPy, Pandas
   <li><b>Visual Studio Code</b></li>
 </ul>
 
+<h2>Installation</h2>
+<ol>
+    <li><strong>Clone the Repository:</strong>
+        <pre><code>git clone https://github.com/yourusername/comic-book-identifier.git
+cd comic-book-identifier</code></pre>
+    </li>
+    <li><strong>Create and Activate a Virtual Environment:</strong>
+        <pre><code>python -m venv .venv
+source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`</code></pre>
+    </li>
+    <li><strong>Install Dependencies:</strong>
+        <pre><code>pip install -r requirements.txt</code></pre>
+    </li>
+    <li><strong>Add Your Model and Data:</strong>
+        <ul>
+            <li>Place your trained model file (e.g., <code>model.h5</code>) in the <code>static/models</code> directory.</li>
+            <li>Ensure your dataset is properly organized in the <code>data</code> directory.</li>
+        </ul>
+    </li>
+    <li><strong>Run the Application:</strong>
+        <pre><code>python app.py</code></pre>
+        The application will start and be accessible at <code>http://127.0.0.1:5000/</code>.
+    </li>
+</ol>
+
 <h2>Usage</h2>
 <ol>
     <li>Open the application in your web browser.</li>
