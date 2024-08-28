@@ -85,7 +85,7 @@ source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`</code></pr
 <p>
 
 <h2>
-<a href="https://github.com/pedromussi1/OCRbookFinder/blob/main/READCODE.md">Code Breakdown Here!</a>
+<a href="https://github.com/pedromussi1/comic-recognizer/blob/main/READCODE.md">Code Breakdown Here!</a>
 </h2>
 
 <h3>Comic Book Cover</h3>
