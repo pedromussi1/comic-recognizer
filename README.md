@@ -106,19 +106,19 @@ source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`</code></pr
   <kbd><img src="https://i.imgur.com/HvubM7R.png" alt="ChoosingCover"></kbd>
 </p>
 
-<p>The next step is transcribing the image to text and printing it to the console using OCR. We can see from the image above that the program does that correctly. The last part of the program will be to find what book the page is from.</p>
+<p>After clicking on "Choose a Comic Cover", you will click on the image with a comic book cover you want to identify and click "Open".</p>
 
 <hr>
 
-<h3>Identifying what Book the text is from</h3>
+<h3>Analyzing the file</h3>
 
 <p align="center">
   <kbd><img src="https://i.imgur.com/tZLRLJb.png" alt="TranslatingText"></kbd>
 </p>
 
-<p>The last step in the program is using the Google Books APi to find what book the page being analyzed is from. The API compares the text we have provided to their library of book titles, trying to find a match. You can see in the image above that the best match the program has found is Frank Herbert's "Dune", which is the correct answer.</p>
+<p>After choosing your file, you will see a thumbnail for the image you selected, and you can proceed by clicking on "identify Comic".</p>
 
-<h3>Identifying what Book the text is from</h3>
+<h3>You will then see what the program identified your comic book to be. You can also click on "Go Back" and try the progrma again with a different comic book cover.</h3>
 
 <p align="center">
   <kbd><img src="https://i.imgur.com/ZWw2c59.png" alt="TranslatingText"></kbd>
