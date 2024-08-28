@@ -118,11 +118,11 @@ source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`</code></pr
 
 <p>After choosing your file, you will see a thumbnail for the image you selected, and you can proceed by clicking on "identify Comic".</p>
 
-<h3>You will then see what the program identified your comic book to be. You can also click on "Go Back" and try the progrma again with a different comic book cover.</h3>
+<h3>Results</h3>
 
 <p align="center">
   <kbd><img src="https://i.imgur.com/ZWw2c59.png" alt="TranslatingText"></kbd>
 </p>
 
-<p>The last step in the program is using the Google Books APi to find what book the page being analyzed is from. The API compares the text we have provided to their library of book titles, trying to find a match. You can see in the image above that the best match the program has found is Frank Herbert's "Dune", which is the correct answer.</p>
+<p>You will then see what the program identified your comic book to be. You can also click on "Go Back" and try the progrma again with a different comic book cover.</p>
 
