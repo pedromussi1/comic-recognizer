@@ -5,23 +5,23 @@
   <a href="https://www.youtube.com/watch?v=h8sp7vFeV7c"><img src="https://i.imgur.com/uPkoNw1.gif" alt="YouTube Demonstration" width="800"></a>
 </p>
 
+<p align="center">A machine learning-powered web application to identify comic books by their covers, built with Flask and TensorFlow.</p>
+
 <h2>Description</h2>
 
-<p> The goal of this project was to develop a program that uses image recognition to identify comic books based on their covers. Built with Flask and a trained machine learning model, the application allows users to upload an image of a comic book cover and receive identification results. The system processes and classifies the uploaded images, providing users with relevant information about the comic book.</p>
+<p>The goal of this project was to develop a program that uses image recognition to identify comic books based on their covers. Built with Flask and a custom-trained machine learning model, the application allows users to upload an image of a comic book cover and receive identification results. The system processes and classifies the uploaded images, providing users with relevant information about the comic book. This tool can be particularly useful for comic book collectors, retailers, and enthusiasts.</p>
 
 <h2>Languages and Utilities Used</h2>
-
-Flask, Python, TensorFlow, OpenCV, HTML/CSS/Javascript, NumPy, Pandas
-
 <ul>
-  <li><b>Flask</b></li>
-  <li><b>Python</b></li>
-  <li><b>TensorFlow</b></li>
-  <li><b>OpenCV</b></li>
-  <li><b>HTML/CSS/Javascript</b></li>
-  <li><b>NumPy</b></li>
-  <li><b>Pandas</b></li>
+    <li><b>Flask:</b> Serves the web application and handles routing.</li>
+    <li><b>Python:</b> Core programming language for logic and model integration.</li>
+    <li><b>TensorFlow:</b> Used to build and train the image classification model.</li>
+    <li><b>OpenCV:</b> Handles image processing tasks before classification.</li>
+    <li><b>HTML/CSS/JavaScript:</b> Builds the frontend interface.</li>
+    <li><b>NumPy:</b> Performs numerical operations on image data.</li>
+    <li><b>Pandas:</b> Used for data manipulation and preparation.</li>
 </ul>
+
 
 <h2>Environments Used</h2>
 
@@ -88,8 +88,6 @@ source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`</code></pr
 <a href="https://github.com/pedromussi1/OCRbookFinder/blob/main/READCODE.md">Code Breakdown Here!</a>
 </h2>
 
-<hr>
-
 <h3>Comic Book Cover</h3>
 
 <p align="center">
@@ -117,6 +115,8 @@ source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`</code></pr
 </p>
 
 <p>After choosing your file, you will see a thumbnail for the image you selected, and you can proceed by clicking on "identify Comic".</p>
+
+<hr>
 
 <h3>Results</h3>
 
