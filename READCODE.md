@@ -6,8 +6,6 @@
 
 <p>This script is responsible for preprocessing and augmenting images from a dataset to enhance the model's ability to recognize comic book covers. Let's break down the functionality and purpose of the code:</p>
 
-<hr>
-
 <h3>1. Imports and Utility Functions:</h3>
 <ul>
   <li><code>cv2</code>: OpenCV is used for reading, manipulating, and saving images.</li>
@@ -52,7 +50,6 @@
   <li>Calls the <code>preprocess_images</code> function with the <code>"dataset"</code> directory as the source of raw images and <code>"preprocessed_dataset"</code> as the destination for processed images.</li>
 </ul>
 
-<hr>
 
 <h3>Key Features:</h3>
 <ul>
@@ -71,11 +68,12 @@
 <h3>Purpose and Benefits:</h3>
 <p>The <code>preprocess.py</code> script is designed to prepare images for training a deep learning model. By resizing, normalizing backgrounds, and augmenting data, it enhances the dataset's quality, leading to a more robust and accurate comic book cover recognition model.</p>
 
+<hr>
+
 <h2>Model.py</h2>
 
 <p>This script is designed to load a preprocessed dataset of comic book covers, build a deep learning model using transfer learning, and train it to classify comic books based on their covers. Below is a detailed breakdown of the code's functionality:</p>
 
-<hr>
 
 <h3>1. Imports and Dependencies:</h3>
 <ul>
@@ -153,8 +151,6 @@
   <li><b>Model Saving:</b> Saves the trained model to a file named <code>"comic_model.h5"</code>.</li>
 </ul>
 
-<hr>
-
 <h3>Key Features:</h3>
 <ul>
   <li><b>Transfer Learning:</b> Leverages the pre-trained MobileNetV2 model to reduce training time and improve performance by using previously learned features.</li>
@@ -172,9 +168,12 @@
 <h3>Purpose and Benefits:</h3>
 <p>The <code>train_model.py</code> script serves as the core module for training a deep learning model to recognize comic book covers. It uses transfer learning with MobileNetV2 to achieve high accuracy with limited data and resources. The model is trained with augmented data, enhancing its ability to generalize to new comic book covers and providing a robust solution for comic book recognition.</p>
 
+<hr>
+
+<h2>Predict.py</h2>
+
 <p>This script is designed to load a pre-trained deep learning model and a label encoder to predict the class of a comic book cover image. Below is a detailed breakdown of the code's functionality:</p>
 
-<hr>
 
 <h3>1. Imports and Dependencies:</h3>
 <ul>
@@ -267,8 +266,6 @@
   </li>
 </ul>
 
-<hr>
-
 <h3>Key Features:</h3>
 <ul>
   <li><b>Model Loading:</b> Efficiently loads a pre-trained model and label encoder for classification.</li>
@@ -286,13 +283,96 @@
 <h3>Purpose and Benefits:</h3>
 <p>The <code>predict_model.py</code> script provides a simple and effective way to classify comic book covers using a pre-trained deep learning model. This can be useful for comic book collectors, retailers, or libraries to automate the organization and identification of comic books.</p>
 
+<hr>
 
-<h2>Conclusion</h2>
+<h2>app.py</h2>
 
-<p>This program effectively combines OCR and web API technologies to identify the book corresponding to text extracted from an image. It leverages Tesseract OCR for text extraction and the Google Books API for book identification. This approach can be useful for various applications such as digitizing and cataloging printed materials.</p>
+<p>This Flask application is designed to classify comic book covers by allowing users to upload an image, which is then processed and predicted using a pre-trained deep learning model. The prediction is displayed to the user in the form of a label.</p>
 
-<div style="display: flex; justify-content: center; align-items: center;">
-  <img src="https://i.imgur.com/GCZqyTU.jpeg" alt="BookPage" style="width: auto; height: 290px; margin: 20px;">
-  <img src="https://i.imgur.com/8Ews4QR.png" alt="TranscribingImage" style="width: auto; height: 290px; margin: 20px;">
-  <img src="https://i.imgur.com/gZxakIi.png" alt="TranslatingText" style="width: auto; height: 290px; margin: 20px;">
+<h3>1. Imports and Dependencies:</h3>
+<ul>
+  <li><code>os</code>: Provides functions to interact with the operating system, such as creating directories.</li>
+  <li><code>flask</code> (from <code>Flask</code>, <code>render_template</code>, <code>request</code>, <code>redirect</code>, <code>url_for</code>): The core components of the Flask web framework to handle web server functionality.</li>
+  <li><code>tensorflow.keras.models</code> (as <code>load_model</code>): For loading the pre-trained Keras model.</li>
+  <li><code>cv2</code>: OpenCV library for image loading and preprocessing.</li>
+  <li><code>numpy</code> (as <code>np</code>): For numerical operations and data manipulation.</li>
+</ul>
 
+<h3>2. Model Loading and Class Labels:</h3>
+<p>The pre-trained model and the list of class labels are loaded at the start of the script:</p>
+<ul>
+  <li><code>model = load_model('comic_book_classifier_model.h5')</code>: Loads the pre-trained Keras model from the specified file path.</li>
+  <li><code>class_labels</code>: A list of labels representing different comic book classes that the model can predict. These labels should match the classes the model was trained on.</li>
+</ul>
+
+<h3>3. <code>preprocess_image</code> Function:</h3>
+<p>This function preprocesses the uploaded image to ensure compatibility with the input shape expected by the model:</p>
+
+<ul>
+  <li><b>Inputs:</b> 
+    <ul>
+      <li><code>image_path</code>: The file path to the uploaded image to be processed.</li>
+    </ul>
+  </li>
+  <li><b>Process:</b>
+    <ul>
+      <li>Loads the image using OpenCV's <code>cv2.imread()</code>.</li>
+      <li>Resizes the image to the target size (224x224) using <code>cv2.resize()</code>.</li>
+      <li>Normalizes pixel values to the range [0, 1] by converting to <code>float32</code> and dividing by 255.0.</li>
+      <li>Adds a batch dimension to the image array using <code>np.expand_dims()</code> to match the input shape required by the model (1, 224, 224, 3).</li>
+    </ul>
+  </li>
+  <li><b>Output:</b> Returns the preprocessed image ready for prediction.</li>
+</ul>
+
+<h3>4. File Upload and Storage Configuration:</h3>
+<p>The application defines an upload folder for storing images temporarily:</p>
+<ul>
+  <li><code>UPLOAD_FOLDER</code>: Specifies the folder (<code>uploads</code>) to store uploaded images.</li>
+  <li><code>os.makedirs(UPLOAD_FOLDER)</code>: Creates the upload directory if it does not already exist.</li>
+</ul>
+
+<h3>5. <code>index</code> Route:</h3>
+<p>The main route (<code>/</code>) serves both the home page for file upload and handles the file upload process:</p>
+
+<ul>
+  <li><b>Methods:</b> Supports both GET and POST methods:
+    <ul>
+      <li><code>GET</code>: Renders the home page (<code>index.html</code>), where users can upload an image.</li>
+      <li><code>POST</code>: Handles the file upload, preprocessing, and prediction:
+        <ul>
+          <li>Checks if a file is uploaded and handles cases where no file is selected.</li>
+          <li>Saves the uploaded file to the specified <code>UPLOAD_FOLDER</code>.</li>
+          <li>Calls <code>preprocess_image()</code> to prepare the image for the model.</li>
+          <li>Makes a prediction using the model's <code>predict()</code> method.</li>
+          <li>Determines the predicted class label by finding the maximum predicted probability and maps it to the corresponding label in <code>class_labels</code>.</li>
+          <li>Renders the result page (<code>result.html</code>) with the predicted class label.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3>6. Application Run Configuration:</h3>
+<p>The script starts the Flask application in debug mode if run directly:</p>
+<ul>
+  <li><code>app.run(debug=True)</code>: Runs the application with debugging enabled to provide detailed error messages during development.</li>
+</ul>
+
+<h3>Key Features:</h3>
+<ul>
+  <li><b>Image Upload:</b> Allows users to upload an image of a comic book cover directly from the web interface.</li>
+  <li><b>Real-time Prediction:</b> Classifies the uploaded image using a deep learning model and provides immediate feedback to the user.</li>
+  <li><b>Dynamic Content:</b> Utilizes Flask's templating engine to dynamically display prediction results.</li>
+</ul>
+
+<h3>Potential Improvements:</h3>
+<ul>
+  <li><b>Enhance Error Handling:</b> Add more robust error handling for scenarios such as unsupported file types, missing files, or corrupted images.</li>
+  <li><b>Improve User Interface:</b> Create a more user-friendly front-end with enhanced design and clear instructions for uploading images.</li>
+  <li><b>Optimize Model Performance:</b> Consider optimizing the model for faster predictions, especially for larger image sizes or complex models.</li>
+  <li><b>Implement Security Measures:</b> Include file validation and security checks to prevent malicious file uploads.</li>
+</ul>
+
+<h3>Purpose and Benefits:</h3>
+<p>This Flask application offers a convenient way to classify comic book covers using a pre-trained deep learning model. It serves as a valuable tool for comic book collectors, retailers, or libraries to automate the organization and identification of comic books.</p>
