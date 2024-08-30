@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comic Book Identifier</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .thumbnail-container {
+            text-align: center; /* Centers the thumbnail horizontally */
+            margin-top: 20px;
+        }
+
+        .thumbnail {
+            max-width: 200px; /* Adjust the maximum width as needed */
+            max-height: 200px; /* Ensure the height is constrained as well */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            object-fit: cover; /* Ensures the image covers the dimensions without distortion */
+            display: inline-block; /* Ensures the thumbnail is centered properly */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Add the logo here -->
+        <!-- <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="max-width: 100px; margin-bottom: 20px;"> -->
+        
+        <h1>Comic Book Identifier</h1>
+        <form action="/" method="POST" enctype="multipart/form-data">
+            <label for="file-upload">Choose a Comic Cover</label>
+            <input id="file-upload" type="file" name="file" accept="image/*" required onchange="previewImage(event)">
+            <div id="thumbnail-container" class="thumbnail-container">
+                <img id="thumbnail" class="thumbnail" src="#" alt="Image preview" style="display:none;">
+            </div>
+            <button type="submit">Identify Comic</button>
+        </form>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+                var thumbnail = document.getElementById('thumbnail');
+                thumbnail.src = e.target.result;
+                thumbnail.style.display = 'inline-block'; /* Change from 'block' to 'inline-block' for centering */
+            }
+            
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+</html>
