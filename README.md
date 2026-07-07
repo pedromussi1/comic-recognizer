@@ -42,12 +42,18 @@ angles, with glare):
 | Setup | Top-1 |
 |---|---|
 | Open Library demo index, over titles it covers | **56%** (22/39) |
-| **Enrollment** — index your *own* photos, identify others | **66%+** |
+| **Enrollment** — index your *own* photos, identify held-out photos | **75%** (0.86 mean score) |
 
 The gap is the point: Open Library often has a *different edition's* cover than the one you
 own, so cross-edition matches score lower (0.65–0.74). Indexing **your own** cover photos
-matches the exact editions and scores 0.77–0.94. Titles absent from the index get pulled to
-the nearest look-alike — a fundamental property of pure nearest-neighbor retrieval.
+matches the exact editions and scores 0.77–0.94. The enrollment number is measured on real
+phone photos of a **54-title personal collection** (held-out photos, not seen during
+enrollment). Titles absent from the index get pulled to the nearest look-alike — a
+fundamental property of pure nearest-neighbor retrieval.
+
+The shipped index bundles the ~45-title Open Library demo set **plus that enrolled personal
+collection** (~200 reference covers), so the app recognizes both famous graphic novels and
+the owner's specific editions out of the box.
 
 ## Recognize your own collection (enrollment)
 
@@ -55,13 +61,15 @@ To reliably recognize *your* comics, enroll your own cover photos — one clear 
 comic — then future photos match the exact editions:
 
 ```bash
-python -m comicid.enroll path/to/your/cover_photos --output data/index
-# optional labels CSV (filename,title[,author]); otherwise the filename is the title
-python -m comicid.enroll path/to/photos --labels labels.csv --output data/index
+# add your covers to the existing index (keeps the demo set):
+python -m comicid.enroll path/to/your/cover_photos --labels labels.csv --output data/index --append
+# ...or build a fresh index from only your photos (drop --append)
 ```
 
-The app then recognizes your collection. No training — enrollment is just embedding each
-cover once.
+`labels.csv` is `filename,title[,author]`; without it the filename becomes the title. The
+app then recognizes your collection. No training — enrollment is just embedding each cover
+once. (`build_index.py` regenerates only the Open Library demo set; enrolled covers are
+added on top with `--append`.)
 
 ## Run it
 

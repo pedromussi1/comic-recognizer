@@ -4,6 +4,19 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-07-07
+
+### Added
+- `enroll --append` to add your own covers to the existing index instead of replacing it.
+- The shipped index now bundles the Open Library demo set **plus an enrolled 54-title
+  personal collection** (~200 reference covers), so the app recognizes real-world comics
+  (Batman New 52 / Rebirth, the Flash, Astonishing X-Men, etc.) out of the box.
+- `data/collection_labels.csv` documents the enrolled collection.
+
+### Changed
+- Real-world evaluation updated: **75% top-1** (0.86 mean score) on held-out photos of a
+  54-title personal collection.
+
 ## [2.1.0] - 2026-07-07
 
 ### Added
@@ -40,5 +53,6 @@ Complete rewrite: from a broken MobileNetV2 classifier into a CLIP + FAISS retri
   identification was 15/15, all above the confidence threshold.
 - Replaced the bloated UTF-16 `requirements.txt` (325 unrelated packages) with a minimal one.
 
+[2.2.0]: https://github.com/pedromussi1/comic-recognizer/releases/tag/v2.2.0
 [2.1.0]: https://github.com/pedromussi1/comic-recognizer/releases/tag/v2.1.0
 [2.0.0]: https://github.com/pedromussi1/comic-recognizer/releases/tag/v2.0.0
