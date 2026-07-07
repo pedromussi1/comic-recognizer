@@ -4,6 +4,13 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2026-07-07
+
+### Fixed
+- De-lumped the enrolled collection: distinct volumes/runs are now separate titles (54 -> 64),
+  and corrected mislabels (a Straczynski Thor and a Waid Daredevil had been filed under the
+  wrong creator; Doomsday Clock Part 1/2 and Invincible Compendium One/Two/Three had been merged).
+
 ## [2.2.0] - 2026-07-07
 
 ### Added
@@ -53,6 +60,7 @@ Complete rewrite: from a broken MobileNetV2 classifier into a CLIP + FAISS retri
   identification was 15/15, all above the confidence threshold.
 - Replaced the bloated UTF-16 `requirements.txt` (325 unrelated packages) with a minimal one.
 
+[2.2.1]: https://github.com/pedromussi1/comic-recognizer/releases/tag/v2.2.1
 [2.2.0]: https://github.com/pedromussi1/comic-recognizer/releases/tag/v2.2.0
 [2.1.0]: https://github.com/pedromussi1/comic-recognizer/releases/tag/v2.1.0
 [2.0.0]: https://github.com/pedromussi1/comic-recognizer/releases/tag/v2.0.0
