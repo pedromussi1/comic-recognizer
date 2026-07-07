@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Raw reference covers downloaded at build time (the committed FAISS index is what the app
+# needs; covers are re-downloadable via `python -m comicid.build_index`)
+data/covers/
+
+# Runtime uploads
+static/uploads/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

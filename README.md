@@ -1,128 +1,80 @@
-
 <h1 align="center">Comic Recognizer</h1>
 
 <p align="center">
   <a href="https://www.youtube.com/watch?v=h8sp7vFeV7c"><img src="https://i.imgur.com/uPkoNw1.gif" alt="YouTube Demonstration" width="800"></a>
 </p>
 
-<p align="center">A machine learning-powered web application to identify comic books by their covers, built with Flask and TensorFlow.</p>
+<p align="center">Identify a comic / graphic novel from a photo of its cover, using <b>CLIP image embeddings + FAISS</b> nearest-neighbor retrieval.</p>
 
-<h2>Description</h2>
+## Why a rewrite
 
-<p>The goal of this project was to develop a program that uses image recognition to identify comic books based on their covers. Built with Flask and a custom-trained machine learning model, the application allows users to upload an image of a comic book cover and receive identification results. The system processes and classifies the uploaded images, providing users with relevant information about the comic book. This tool can be particularly useful for comic book collectors, retailers, and enthusiasts.</p>
+The original version was a MobileNetV2 classifier whose pieces never fit together — training
+saved `comic_model.h5`, the app loaded `comic_book_classifier_model.h5` with 17 hardcoded
+labels, and `predict.py` expected a `label_encoder.pkl` nothing produced. No dataset, model,
+or encoder was committed, so it could not run.
 
-<h2>Languages and Utilities Used</h2>
-<ul>
-    <li><b>Flask:</b> Serves the web application and handles routing.</li>
-    <li><b>Python:</b> Core programming language for logic and model integration.</li>
-    <li><b>TensorFlow:</b> Used to build and train the image classification model.</li>
-    <li><b>OpenCV:</b> Handles image processing tasks before classification.</li>
-    <li><b>HTML/CSS/JavaScript:</b> Builds the frontend interface.</li>
-    <li><b>NumPy:</b> Performs numerical operations on image data.</li>
-    <li><b>Pandas:</b> Used for data manipulation and preparation.</li>
-</ul>
+This rewrite replaces the classifier with **retrieval**, which fits the problem much better:
 
+| Classifier (old) | Retrieval (now) |
+|---|---|
+| Fixed 17 classes; adding a comic means retraining | Add a comic by embedding one cover — **no training** |
+| Needs a labeled dataset + training run to work | Runs immediately from a prebuilt index |
+| Broken, unrunnable wiring | End-to-end and tested |
 
-<h2>Environments Used</h2>
+## How it works
 
-<ul>
-  <li><b>Windows 11</b></li>
-  <li><b>Visual Studio Code</b></li>
-</ul>
+```
+cover photo ──▶ CLIP embedding ──▶ FAISS nearest-neighbor ──▶ best-matching comic
+```
 
-<h2>Installation</h2>
-<ol>
-    <li><strong>Clone the Repository:</strong>
-        <pre><code>git clone https://github.com/yourusername/comic-book-identifier.git
-cd comic-book-identifier</code></pre>
-    </li>
-    <li><strong>Create and Activate a Virtual Environment:</strong>
-        <pre><code>python -m venv .venv
-source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`</code></pre>
-    </li>
-    <li><strong>Install Dependencies:</strong>
-        <pre><code>pip install -r requirements.txt</code></pre>
-    </li>
-    <li><strong>Add Your Model and Data:</strong>
-        <ul>
-            <li>Place your trained model file (e.g., <code>model.h5</code>) in the <code>static/models</code> directory.</li>
-            <li>Ensure your dataset is properly organized in the <code>data</code> directory.</li>
-        </ul>
-    </li>
-    <li><strong>Run the Application:</strong>
-        <pre><code>python app.py</code></pre>
-        The application will start and be accessible at <code>http://127.0.0.1:5000/</code>.
-    </li>
-</ol>
+- Each reference cover is embedded with **CLIP** (`clip-ViT-B-32`) into a 512-d vector.
+- A **FAISS** inner-product index over L2-normalized vectors gives cosine-similarity search.
+- The reference set is built from free **Open Library** cover thumbnails, with **multiple
+  editions per title** so a query matches if it resembles *any* edition.
 
-<h2>Usage</h2>
-<ol>
-    <li>Open the application in your web browser.</li>
-    <li>Choose a comic book cover image from your local files using the file input field.</li>
-    <li>Click the "Identify Comic" button to upload the image and process it.</li>
-    <li>The result will display below the upload form, showing the identified comic book.</li>
-</ol>
+On simulated photos (rotation, blur, brightness, crop, JPEG recompression of held-out
+covers), top-1 identification was **15/15**, all above the 0.75 confidence threshold.
 
-<h2>Code Structure</h2>
-<ul>
-    <li><strong>app.py:</strong> Main application file, contains routes and logic for preprocessing and classification.</li>
-    <li><strong>static/:</strong> Contains static files such as CSS, JavaScript, and images.</li>
-    <li><strong>templates/:</strong> HTML templates for rendering the web pages.</li>
-    <li><strong>data/:</strong> Contains image data and any additional resources.</li>
-    <li><strong>models/:</strong> Stores the trained machine learning model.</li>
-</ul>
+## Run it
 
-<h2>Known Issues</h2>
-<ul>
-    <li>Images with different backgrounds may affect the identification accuracy.</li>
-    <li>The application may require fine-tuning for better performance on diverse datasets.</li>
-</ul>
+```bash
+python -m venv .venv
+.venv\Scripts\activate            # (source .venv/bin/activate on macOS/Linux)
+pip install -r requirements.txt   # pulls torch — sizeable first install
+python app.py                     # http://127.0.0.1:5000/
+```
 
+The committed index (`data/index/`) means it runs out of the box. To rebuild or extend it:
 
-<h2>Contributing</h2>
-<p>Contributions are welcome! Please fork the repository, create a new branch, and submit a pull request with your changes. For major changes, please open an issue first to discuss what you would like to change.</p>
+```bash
+python -m comicid.build_index     # re-fetches covers from Open Library
+```
 
-<p>
+Add your own comics by editing the `COMICS` list in `comicid/build_index.py` and rebuilding.
 
-<h2>
-<a href="https://github.com/pedromussi1/comic-recognizer/blob/main/READCODE.md">Code Breakdown Here!</a>
-</h2>
+## Layout
 
-<h3>Comic Book Cover</h3>
+```
+comicid/
+  embedder.py      CLIP encoder (images + text)
+  index.py         FAISS cover index + metadata, save/load
+  recognizer.py    high-level identify()
+  build_index.py   build the reference index from Open Library covers
+app.py             Flask web app
+data/index/        committed FAISS index + metadata (the reference set)
+tests/             pytest suite
+```
 
-<p align="center">
-  <kbd><img src="https://i.imgur.com/SrQ3qVB.png" alt="ComicBook" width="900"></kbd>
-</p>
+## Tests
 
-<p>The main page gives the option for the user to choose a comic cover from their computer. Clicking on "identify Comic" before choosing a comic cover will do nothing.</p>
+```bash
+python -m pytest -q
+```
 
-<hr>
+## Notes
 
-<h3>Choosing a file</h3>
-
-<p align="center">
-  <kbd><img src="https://i.imgur.com/HvubM7R.png" alt="ChoosingCover"></kbd>
-</p>
-
-<p>After clicking on "Choose a Comic Cover", you will click on the image with a comic book cover you want to identify and click "Open".</p>
-
-<hr>
-
-<h3>Analyzing the file</h3>
-
-<p align="center">
-  <kbd><img src="https://i.imgur.com/tZLRLJb.png" alt="TranslatingText"></kbd>
-</p>
-
-<p>After choosing your file, you will see a thumbnail for the image you selected, and you can proceed by clicking on "identify Comic".</p>
-
-<hr>
-
-<h3>Results</h3>
-
-<p align="center">
-  <kbd><img src="https://i.imgur.com/ZWw2c59.png" alt="TranslatingText"></kbd>
-</p>
-
-<p>You will then see what the program identified your comic book to be. You can also click on "Go Back" and try the progrma again with a different comic book cover.</p>
-
+- The demo index holds ~20 well-known graphic novels; recognition works best when the cover
+  you photograph resembles one of them. Point `build_index.py` at your own collection to
+  expand it.
+- Reference covers are displayed at runtime via their Open Library URL; only the derived
+  embeddings are committed, not the cover images.
