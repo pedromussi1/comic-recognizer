@@ -6,6 +6,8 @@
 
 <p align="center">Identify a comic / graphic novel from a photo of its cover, using <b>CLIP image embeddings + FAISS</b> nearest-neighbor retrieval.</p>
 
+<p align="center"><b>🚀 Live demo:</b> <a href="https://huggingface.co/spaces/Zao0531/comic-recognizer">huggingface.co/spaces/Zao0531/comic-recognizer</a></p>
+
 ## Why a rewrite
 
 The original version was a MobileNetV2 classifier whose pieces never fit together — training
