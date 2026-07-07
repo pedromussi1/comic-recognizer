@@ -31,10 +31,21 @@ cover photo ──▶ CLIP embedding ──▶ FAISS nearest-neighbor ──▶ 
 
 - Each reference cover is embedded with **CLIP** (`clip-ViT-B-32`) into a 512-d vector.
 - A **FAISS** inner-product index over L2-normalized vectors gives cosine-similarity search.
-- The reference set is built from free **Open Library** cover thumbnails, with **multiple
-  editions per title** so a query matches if it resembles *any* edition.
 
-The demo index ships with ~45 well-known titles (built from Open Library).
+**The shipped index has ~3,700 reference covers**, from three sources:
+- **Metron** (metron.cloud) — ~3,500 real issue covers across ~85 popular series (Batman,
+  Spider-Man, X-Men, Saga, Invincible, …), so it recognizes comics down to the **specific
+  issue** (e.g. *The Amazing Spider-Man (1963) #54*).
+- **Open Library** — well-known graphic novels / collected editions.
+- An **enrolled personal collection** (see below).
+
+To grow it further, ingest more covers from Metron:
+
+```bash
+# credentials in a .env file: METRON_USER=... / METRON_PASSWORD=...
+python -m comicid.ingest_metron            # popular series (resumable, saves per series)
+python -m comicid.ingest_metron --all --limit 5000   # or crawl the catalog
+```
 
 ## Real-world accuracy (and its honest limits)
 
@@ -45,6 +56,7 @@ angles, with glare):
 |---|---|
 | Open Library demo index, over titles it covers | **56%** (22/39) |
 | **Enrollment** — index your *own* photos, identify held-out photos | **75%** (0.86 mean score) |
+| Popular Metron issues, identified from simulated photos | **12/12** (0.86–0.98) |
 
 The gap is the point: Open Library often has a *different edition's* cover than the one you
 own, so cross-edition matches score lower (0.65–0.74). Indexing **your own** cover photos
@@ -99,6 +111,7 @@ comicid/
   recognizer.py    high-level identify()
   build_index.py   build the reference index from Open Library covers
   enroll.py        build a personal index from your own cover photos
+  ingest_metron.py pull thousands of real issue covers from the Metron API
 app.py             Flask web app
 data/index/        committed FAISS index + metadata (the reference set)
 tests/             pytest suite

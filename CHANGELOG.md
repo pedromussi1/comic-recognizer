@@ -4,6 +4,16 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-07-07
+
+### Added
+- **Metron ingestion** (`comicid/ingest_metron.py`): pull real issue covers from the Metron
+  API to scale the index toward general recognition. Targets popular series by default,
+  saves after each series (crash-resilient / resumable), and backs off on rate limits.
+- The shipped index now bundles **~3,500 covers from ~85 popular series** (recognizing
+  specific issues) on top of the Open Library set and the enrolled personal collection —
+  **~3,700 reference covers** total. Perturbed-photo recognition of popular issues: 12/12.
+
 ## [2.3.0] - 2026-07-07
 
 ### Added
@@ -68,6 +78,7 @@ Complete rewrite: from a broken MobileNetV2 classifier into a CLIP + FAISS retri
   identification was 15/15, all above the confidence threshold.
 - Replaced the bloated UTF-16 `requirements.txt` (325 unrelated packages) with a minimal one.
 
+[2.4.0]: https://github.com/pedromussi1/comic-recognizer/releases/tag/v2.4.0
 [2.3.0]: https://github.com/pedromussi1/comic-recognizer/releases/tag/v2.3.0
 [2.2.1]: https://github.com/pedromussi1/comic-recognizer/releases/tag/v2.2.1
 [2.2.0]: https://github.com/pedromussi1/comic-recognizer/releases/tag/v2.2.0

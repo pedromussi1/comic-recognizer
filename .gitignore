@@ -11,6 +11,9 @@ data/covers/
 # Runtime uploads
 static/uploads/
 
+# Secrets (Metron credentials for comicid.ingest_metron)
+.env
+
 # OS / editor
 .DS_Store
 .idea/
