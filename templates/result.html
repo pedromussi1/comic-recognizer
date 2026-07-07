@@ -1,18 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comic Book Identifier - Result</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Comic Book Identified!</h1>
-        <div class="result-box">
-            <p><strong>Identified as:</strong> {{ label }}</p>
-            <a href="/">Go Back</a>
-        </div>
+{% extends "base.html" %}
+{% block title %}Result · Comic Recognizer{% endblock %}
+
+{% block content %}
+<div class="card">
+    {% if best %}
+    <div class="result-head">
+        {% if confident %}
+        <div class="badge">Match</div>
+        {% else %}
+        <div class="badge low">Closest guess · low confidence</div>
+        {% endif %}
+        <h2 class="comic-title">{{ best.title }}</h2>
+        <p class="comic-author">{{ best.author }}</p>
+        <p class="score muted">cosine similarity {{ '%.2f' % best.score }}</p>
     </div>
-</body>
-</html>
+
+    <div class="covers">
+        <figure>
+            <img src="{{ url_for('static', filename='uploads/' + image) }}" alt="Your upload">
+            <figcaption class="muted">Your photo</figcaption>
+        </figure>
+        {% if best.cover_image %}
+        <figure>
+            <img src="{{ best.cover_image }}" alt="Reference cover">
+            <figcaption class="muted">Reference cover</figcaption>
+        </figure>
+        {% endif %}
+    </div>
+
+    {% if best.source_url %}
+    <p class="src"><a href="{{ best.source_url }}" target="_blank" rel="noopener">View on Open Library ↗</a></p>
+    {% endif %}
+
+    {% if others %}
+    <details class="others">
+        <summary>Other possibilities</summary>
+        <ul>
+            {% for m in others %}
+            <li>{{ m.title }} <span class="muted">— {{ m.author }} ({{ '%.2f' % m.score }})</span></li>
+            {% endfor %}
+        </ul>
+    </details>
+    {% endif %}
+
+    {% else %}
+    <div class="result-head">
+        <div class="badge low">No match</div>
+        <p class="muted">Couldn't match this cover. The demo index only holds ~20 graphic
+        novels — try one of those, or a clearer, straight-on photo of the cover.</p>
+    </div>
+    <img class="solo" src="{{ url_for('static', filename='uploads/' + image) }}" alt="Your upload">
+    {% endif %}
+
+    <a href="/" class="btn secondary">Try another cover</a>
+</div>
+
+<style>
+    .result-head { text-align: center; margin-bottom: 18px; }
+    .badge {
+        display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .04em;
+        text-transform: uppercase; color: var(--accent); background: var(--accent-soft);
+        padding: 4px 10px; border-radius: 999px; margin-bottom: 10px;
+    }
+    .badge.low { color: var(--muted); background: var(--border); }
+    .comic-title { margin: 4px 0; font-size: 24px; letter-spacing: -0.02em; }
+    .comic-author { margin: 0; color: var(--muted); font-size: 16px; }
+    .score { margin: 6px 0 0; font-size: 13px; }
+    .covers { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
+    .covers figure { margin: 0; text-align: center; }
+    .covers img { max-width: 100%; max-height: 260px; border-radius: 10px; border: 1px solid var(--border); }
+    .covers figcaption { margin-top: 6px; font-size: 12px; }
+    .solo { display: block; max-width: 100%; max-height: 300px; margin: 0 auto 18px; border-radius: 10px; border: 1px solid var(--border); }
+    .src { text-align: center; margin: 0 0 16px; }
+    .src a { color: var(--accent); text-decoration: none; font-size: 14px; }
+    .others { margin-bottom: 18px; }
+    .others summary { cursor: pointer; color: var(--muted); font-size: 14px; }
+    .others ul { margin: 10px 0 0; padding-left: 18px; }
+    .others li { margin-bottom: 4px; }
+</style>
+{% endblock %}

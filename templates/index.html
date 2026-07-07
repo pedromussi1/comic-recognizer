@@ -1,57 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comic Book Identifier</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <style>
-        .thumbnail-container {
-            text-align: center; /* Centers the thumbnail horizontally */
-            margin-top: 20px;
-        }
+{% extends "base.html" %}
 
-        .thumbnail {
-            max-width: 200px; /* Adjust the maximum width as needed */
-            max-height: 200px; /* Ensure the height is constrained as well */
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            object-fit: cover; /* Ensures the image covers the dimensions without distortion */
-            display: inline-block; /* Ensures the thumbnail is centered properly */
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Add the logo here -->
-        <!-- <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="max-width: 100px; margin-bottom: 20px;"> -->
-        
-        <h1>Comic Book Identifier</h1>
-        <form action="/" method="POST" enctype="multipart/form-data">
-            <label for="file-upload">Choose a Comic Cover</label>
-            <input id="file-upload" type="file" name="file" accept="image/*" required onchange="previewImage(event)">
-            <div id="thumbnail-container" class="thumbnail-container">
-                <img id="thumbnail" class="thumbnail" src="#" alt="Image preview" style="display:none;">
+{% block content %}
+<div class="card">
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+    <form id="upload-form" method="POST" enctype="multipart/form-data">
+        <label id="drop" for="file" class="dropzone">
+            <input type="file" id="file" name="file" accept="image/*" hidden>
+            <div id="prompt" class="dz-prompt">
+                <div class="dz-icon">🦸</div>
+                <div class="dz-title">Drop a comic cover here or <span class="link">browse</span></div>
+                <div class="muted">A photo or scan of the front cover · JPG, PNG, WebP</div>
             </div>
-            <button type="submit">Identify Comic</button>
-        </form>
-    </div>
+            <img id="preview" class="preview" alt="preview" hidden>
+        </label>
 
-    <script>
-        function previewImage(event) {
-            var file = event.target.files[0];
-            var reader = new FileReader();
-            
-            reader.onload = function(e) {
-                var thumbnail = document.getElementById('thumbnail');
-                thumbnail.src = e.target.result;
-                thumbnail.style.display = 'inline-block'; /* Change from 'block' to 'inline-block' for centering */
-            }
-            
-            if (file) {
-                reader.readAsDataURL(file);
-            }
+        <button id="submit" class="btn" type="submit" disabled>
+            <span id="submit-label">Identify comic</span>
+        </button>
+    </form>
+
+    <details class="how">
+        <summary>How it works</summary>
+        <p class="muted">
+            The cover is embedded with a CLIP vision model and matched against a reference
+            index of comic covers using nearest-neighbor search (FAISS). No training — a new
+            comic is added just by embedding its cover. Best results when the cover you
+            photograph resembles one of the ~20 graphic novels in the demo index.
+        </p>
+    </details>
+</div>
+
+<style>
+    .dropzone {
+        display: flex; align-items: center; justify-content: center;
+        min-height: 200px; padding: 20px; margin-bottom: 16px;
+        border: 2px dashed var(--border); border-radius: 14px;
+        background: var(--accent-soft); cursor: pointer; text-align: center;
+        transition: border-color .15s ease;
+    }
+    .dropzone.dragover { border-color: var(--accent); }
+    .dz-icon { font-size: 34px; }
+    .dz-title { font-weight: 600; margin: 8px 0 2px; }
+    .link { color: var(--accent); text-decoration: underline; }
+    .preview { max-width: 100%; max-height: 340px; border-radius: 10px; }
+    .how { margin-top: 18px; }
+    .how summary { cursor: pointer; color: var(--muted); font-size: 14px; }
+    .how p { margin: 10px 0 0; }
+</style>
+
+<script>
+    (function () {
+        const drop = document.getElementById('drop');
+        const input = document.getElementById('file');
+        const preview = document.getElementById('preview');
+        const prompt = document.getElementById('prompt');
+        const submit = document.getElementById('submit');
+        const form = document.getElementById('upload-form');
+        const label = document.getElementById('submit-label');
+
+        function showFile(file) {
+            if (!file || !file.type.startsWith('image/')) return;
+            preview.src = URL.createObjectURL(file);
+            preview.hidden = false;
+            prompt.hidden = true;
+            submit.disabled = false;
         }
-    </script>
-</body>
-</html>
+        input.addEventListener('change', () => showFile(input.files[0]));
+        ['dragenter', 'dragover'].forEach(evt =>
+            drop.addEventListener(evt, e => { e.preventDefault(); drop.classList.add('dragover'); }));
+        ['dragleave', 'drop'].forEach(evt =>
+            drop.addEventListener(evt, e => { e.preventDefault(); drop.classList.remove('dragover'); }));
+        drop.addEventListener('drop', e => {
+            const file = e.dataTransfer.files[0];
+            if (file) { input.files = e.dataTransfer.files; showFile(file); }
+        });
+        form.addEventListener('submit', () => {
+            submit.disabled = true;
+            label.textContent = 'Matching…';
+            const s = document.createElement('span'); s.className = 'spinner'; submit.prepend(s);
+        });
+    })();
+</script>
+{% endblock %}
