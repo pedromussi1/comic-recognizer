@@ -4,6 +4,20 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-07-07
+
+### Added
+- **Enrollment** (`comicid/enroll.py` + `python -m comicid.enroll`): build a personal index
+  from your own cover photos (one per comic), so recognition matches your exact editions.
+  On real phone photos this reached ~66% top-1 (scores 0.77–0.94), vs ~56% for the
+  generic Open Library index (whose different editions score 0.65–0.74).
+- Expanded the demo index to ~45 titles / 121 covers (added many mainstream Marvel/DC/Image
+  graphic novels).
+
+### Changed
+- README now reports an honest real-world evaluation on 56 real photos and documents the
+  nearest-neighbor limitation (titles absent from the index match their nearest look-alike).
+
 ## [2.0.0] - 2026-07-07
 
 Complete rewrite: from a broken MobileNetV2 classifier into a CLIP + FAISS retrieval system.
@@ -26,4 +40,5 @@ Complete rewrite: from a broken MobileNetV2 classifier into a CLIP + FAISS retri
   identification was 15/15, all above the confidence threshold.
 - Replaced the bloated UTF-16 `requirements.txt` (325 unrelated packages) with a minimal one.
 
+[2.1.0]: https://github.com/pedromussi1/comic-recognizer/releases/tag/v2.1.0
 [2.0.0]: https://github.com/pedromussi1/comic-recognizer/releases/tag/v2.0.0

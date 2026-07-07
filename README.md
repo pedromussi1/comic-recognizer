@@ -32,8 +32,36 @@ cover photo ──▶ CLIP embedding ──▶ FAISS nearest-neighbor ──▶ 
 - The reference set is built from free **Open Library** cover thumbnails, with **multiple
   editions per title** so a query matches if it resembles *any* edition.
 
-On simulated photos (rotation, blur, brightness, crop, JPEG recompression of held-out
-covers), top-1 identification was **15/15**, all above the 0.75 confidence threshold.
+The demo index ships with ~45 well-known titles (built from Open Library).
+
+## Real-world accuracy (and its honest limits)
+
+Evaluated on **56 real phone photos** of an actual collection (comics on a carpet, at
+angles, with glare):
+
+| Setup | Top-1 |
+|---|---|
+| Open Library demo index, over titles it covers | **56%** (22/39) |
+| **Enrollment** — index your *own* photos, identify others | **66%+** |
+
+The gap is the point: Open Library often has a *different edition's* cover than the one you
+own, so cross-edition matches score lower (0.65–0.74). Indexing **your own** cover photos
+matches the exact editions and scores 0.77–0.94. Titles absent from the index get pulled to
+the nearest look-alike — a fundamental property of pure nearest-neighbor retrieval.
+
+## Recognize your own collection (enrollment)
+
+To reliably recognize *your* comics, enroll your own cover photos — one clear photo per
+comic — then future photos match the exact editions:
+
+```bash
+python -m comicid.enroll path/to/your/cover_photos --output data/index
+# optional labels CSV (filename,title[,author]); otherwise the filename is the title
+python -m comicid.enroll path/to/photos --labels labels.csv --output data/index
+```
+
+The app then recognizes your collection. No training — enrollment is just embedding each
+cover once.
 
 ## Run it
 
@@ -60,6 +88,7 @@ comicid/
   index.py         FAISS cover index + metadata, save/load
   recognizer.py    high-level identify()
   build_index.py   build the reference index from Open Library covers
+  enroll.py        build a personal index from your own cover photos
 app.py             Flask web app
 data/index/        committed FAISS index + metadata (the reference set)
 tests/             pytest suite
